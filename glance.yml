@@ -1,0 +1,70 @@
+server:
+  port: 80
+  assets-path: ./assets
+branding:
+  hide-footer: true
+theme:
+  background-color: 225 14 15
+  primary-color: 157 47 65
+  contrast-multiplier: 1.1
+  custom-css-file: ./assets/main.css
+pages:
+  - name: 主頁
+    columns:
+      - size: small
+        widgets:
+          - type: calendar
+            title: 日曆
+            first-day-of-week: monday
+          - type: clock
+            title: 時間
+            hour-format: 24h
+
+      - size: full
+        widgets:
+          - type: releases
+            title: 發行
+            show-source-icon: true
+            token: ${GITHUB_TOKEN}
+            repositories:
+              - BlackTeaPie/Course-of-Temptation-Chinese-Localization
+              - chinese-liliths-throne/liliths-throne-chinese-release
+              - Eltirosto/Degrees-of-Lewdity-Chinese-Localization
+
+  - name: 統計
+    columns:
+      - size: full
+        widgets:
+          - type: server-stats
+            cache: 1s
+            title: glance服務器統計
+            title-url: http://localhost/
+            servers:
+              - type: local
+                name: 服務器
+          - type: monitor
+            title: 監視器
+            cache: 1s
+            sites:
+              - title: ArchiSteamFarm
+                url: http://localhost:1242
+                icon: /assets/asf.png
+
+  - name: H
+    columns:
+      - size: full
+        widgets:
+          - type: rss
+            feeds:
+              - title: 琉璃神社-論壇
+                url: https://www.hacg.icu/wp/bbs?type=rss2&forum=g
+              - title: 琉璃神社-話題
+                url: https://www.hacg.icu/wp/bbs?type=rss2&forum=g&topic=g
+          - type: custom-api
+            title: random image
+            url: https://3650000.xyz/api/?type=json&num=5
+            parameters:
+              mode: 66
+            method: GET
+            template: |
+              <img src="{{ .JSON.String "url" }}" style="" />
