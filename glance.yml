@@ -4,20 +4,24 @@ server:
 branding:
   hide-footer: true
 theme:
-  background-color: 225 14 15
-  primary-color: 157 47 65
-  contrast-multiplier: 1.1
+  background-color: 232 23 18
+  contrast-multiplier: 1.2
+  primary-color: 220 83 75
+  positive-color: 105 48 72
+  negative-color: 351 74 73
   custom-css-file: ./assets/main.css
 pages:
   - name: 主頁
+    slug: Home
     columns:
       - size: small
         widgets:
           - type: calendar
             title: 日曆
-            first-day-of-week: monday
+            first-day-of-week: sunday
           - type: clock
             title: 時間
+            title-url: https://time.is/?c=d3Y%E5%B9%B43F3j%E6%97%A5%EF%BC%8C3l%EF%BC%8C%E7%AC%AC3W%E9%80%B1XtH2i2sXfmtXc0Xo480Xz1Xa1Xb51ea29.4e4185.28571f.2d99db.80265.1bb85e.1c3b23Xw1Xv20231119Xh0Xi1XZ1XmXuXs0XB1
             hour-format: 24h
 
       - size: full
@@ -32,26 +36,59 @@ pages:
               - chinese-liliths-throne/liliths-throne-chinese-release
               - Eltirosto/Degrees-of-Lewdity-Chinese-Localization
 
-  - name: 統計
+  - name: 狀態
+    slug: stats
     columns:
       - size: full
         widgets:
           - type: server-stats
             cache: 1s
-            title: glance服務器統計
+            title: glance服務器狀態
             title-url: http://localhost/
             servers:
               - type: local
                 name: 服務器
           - type: monitor
-            title: 監視器
+            title: 狀態監視器
             cache: 1s
             sites:
               - title: ArchiSteamFarm
                 url: http://localhost:1242
                 icon: /assets/asf.png
+
+  - name: h
+    columns:
+      - size: full
+        widgets:
+          - type: rss
+            limit: 15
+            collapse-after: 8
+            # failed to retrieve any content
+            feeds:
+              - title: 琉璃神社-論壇
+                url: https://www.hacg.icu/wp/bbs?type=rss2&forum=g
+              - title: 琉璃神社-話題
+                url: https://www.hacg.icu/wp/bbs?type=rss2&forum=g&topic=g
+          - type: custom-api
+            title: random image
+            title-url: https://3650000.xyz/api?mode=66
+            cache: 10m
+            url: https://3650000.xyz/api/
+            parameters:
+              mode: 66
+              type: json
+              num: 5
+            method: GET
+            template: |
+              <img src="{{ .JSON.String "url" }}" style="" />
+
+  - name: ASF
+    columns:
+      - size: full
+        widgets:
           - type: custom-api
             title: ASF log
+            title-url: http://localhost:1242/log
             cache: 1s
             url: http://localhost:1242/Api/NLog/File
             headers:
@@ -67,6 +104,7 @@ pages:
 
           - type: custom-api
             title: ASF info
+            title-url: http://localhost:1242
             cache: 1s
             url: http://localhost:1242/Api/Bot/asf
             headers:
@@ -91,26 +129,3 @@ pages:
               </div>
               </div>
               {{ end }}
-
-  - name: H
-    columns:
-      - size: full
-        widgets:
-          - type: rss
-            # failed to retrieve any content
-            feeds:
-              - title: 琉璃神社-論壇
-                url: https://www.hacg.icu/wp/bbs?type=rss2&forum=g
-              - title: 琉璃神社-話題
-                url: https://www.hacg.icu/wp/bbs?type=rss2&forum=g&topic=g
-          - type: custom-api
-            title: random image
-            cache: 10m
-            url: https://3650000.xyz/api/
-            parameters:
-              mode: 66
-              type: json
-              num: 5
-            method: GET
-            template: |
-              <img src="{{ .JSON.String "url" }}" style="" />
