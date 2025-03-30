@@ -54,32 +54,63 @@ pages:
             title: ASF log
             cache: 1s
             url: http://localhost:1242/Api/NLog/File
+            headers:
+              Authentication: ${ASF_PASSWORD}
             parameters:
-              password: ${ASF_PASSWORD}
-              count: 7
+              count: 15
             template: |
+              <div style="overflow-y: scroll;" id="ASF-log">
               {{ range .JSON.Array "Result.Content" }}
-              <div style="display: grid;grid-template-columns: auto auto 1fr;line-height: 1.1;margin: 0 0 .1em;width: 100%;">{{ .String "" }}</div>
+              <div style="display: grid;grid-template-columns: auto auto 1fr;line-height: 1.1;margin: 0 0 .1em;width: 100%;">{{ .String "" | trimSpace | printf }}</div>
+              {{ end }}
+              </div>
+
+          - type: custom-api
+            title: ASF info
+            cache: 1s
+            url: http://localhost:1242/Api/Bot/asf
+            headers:
+              Authentication: ${ASF_PASSWORD}
+            subrequests:
+              gl_cofg:
+                url: http://localhost:1242/Api/ASF/
+                headers:
+                  Authentication: ${ASF_PASSWORD}
+            template: |
+              <div>
+              {{ $gl_cofg := ( .Subrequest "gl_cofg" ) }}
+              <p>Version: {{ $gl_cofg.JSON.String "Result.Version" }}
+              <p>SteamOwnerID: {{ $gl_cofg.JSON.String "Result.GlobalConfig.s_SteamOwnerID" }}</p><br>
+              </div>
+              {{ range .JSON.Array "Result.*" }}
+              <div>
+              <h3>bot: {{ .String "BotName" }}</h3>
+              <div style="margin-left: 20px;">
+              <p>Paused: {{ .Bool "Paused" }}</p>
+              <p>SteamID: {{ .String "s_SteamID" }}</p>
+              </div>
+              </div>
               {{ end }}
 
-  # - name: H
-  #   columns:
-  #     - size: full
-  #       widgets:
-  #           # failed to retrieve any content
-  #         - type: rss
-  #           feeds:
-  #             - title: 琉璃神社-論壇
-  #               url: https://www.hacg.icu/wp/bbs?type=rss2&forum=g
-  #             - title: 琉璃神社-話題
-  #               url: https://www.hacg.icu/wp/bbs?type=rss2&forum=g&topic=g
-  #           # Get "http://img.btu.pp.ua/random/1/%E7%A8%9A%E9%A2%9C%E9%85%B1pero%20VIP%E6%94%B6%E8%B2%BB%E5%A5%97%201%20%E7%94%BB%E5%83%8F45%E6%9E%9A%20Girlimg_8268.jpg": dial tcp: lookup img.btu.pp.ua: no such host
-  #         - type: custom-api
-  #           title: random image
-  #           cache: 10m
-  #           url: https://3650000.xyz/api/?type=json&num=5
-  #           parameters:
-  #             mode: 66
-  #           method: GET
-  #           template: |
-  #             <img src="{{ .JSON.String "url" }}" style="" />
+  - name: H
+    columns:
+      - size: full
+        widgets:
+          - type: rss
+            # failed to retrieve any content
+            feeds:
+              - title: 琉璃神社-論壇
+                url: https://www.hacg.icu/wp/bbs?type=rss2&forum=g
+              - title: 琉璃神社-話題
+                url: https://www.hacg.icu/wp/bbs?type=rss2&forum=g&topic=g
+          - type: custom-api
+            title: random image
+            cache: 10m
+            url: https://3650000.xyz/api/
+            parameters:
+              mode: 66
+              type: json
+              num: 5
+            method: GET
+            template: |
+              <img src="{{ .JSON.String "url" }}" style="" />
