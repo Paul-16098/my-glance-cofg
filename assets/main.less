@@ -1,0 +1,16 @@
+@import "fonts.less";
+@import "value.less";
+
+:root {
+  text-shadow: var(--fr-font-shadow);
+  -webkit-text-stroke: var(--fr-font-stroke);
+  font-feature-settings: var(--fr-font-feature, unset);
+  font-variant: var(--fr-font-variant, unset);
+  text-rendering: var(--fr-render-text, unset);
+  shape-rendering: var(--fr-render-shape, unset);
+  image-rendering: var(--fr-render-image, unset);
+  font-optical-sizing: auto;
+  font-kerning: auto;
+  font-family: var(--fr-font-family), var(--fr-font-basefont),
+    var(--fr-font-emoji);
+}

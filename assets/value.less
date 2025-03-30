@@ -1,0 +1,32 @@
+// out: false
+
+:root {
+  --fr-font-basefont: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --fr-font-emoji: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji",
+    "Android Emoji", "EmojiSymbols", "EmojiOne Mozilla", "Twemoji Mozilla",
+    "Segoe UI Symbol", "Noto Color Emoji Compat", emoji, "Font Awesome 6 Pro",
+    "Font Awesome 5 Pro", FontAwesome, codicon, iconfont, icomoon, IcoFont,
+    bwi-font, fontello, themify, "Segoe Fluent Icons", "Material Design Icons",
+    bootstrap-icons;
+  --fr-font-fontscale: 1;
+  --fr-font-family: "Fira Code", "YouYuan";
+  --fr-font-shadow: 0 0 0.75px #7c7c7cdd;
+  --fr-font-stroke: 0.41px currentcolor;
+  --fr-no-stroke: 0px transparent;
+  --fr-fix-stroke: var(--fr-no-stroke);
+  --fr-fix-shadow: 0 0 0.75px #7c7c7c2b;
+  --fr-render-text: optimizeLegibility;
+  --fr-render-shape: geometricPrecision;
+  --fr-render-image: auto;
+  --fr-mono-font: "Operator Mono Lig", "Fira Code", "Source Code Pro",
+    "JetBrains Mono", Inconsolata, Monaco, "Roboto Mono", "Ubuntu Mono",
+    "Anonymous Pro", "Droid Sans Mono", Menlo, Consolas;
+  --fr-mono-fallback: ui-monospace, "Courier New", "Liberation Mono", Courier;
+  --fr-mono-shadowcolor: color-mix(
+    in srgb,
+    rgba(69, 69, 70, 0.05) 75%,
+    currentcolor 25%
+  );
+  --fr-mono-shadow: 0 0 0 var(--fr-mono-shadowcolor, currentcolor);
+  --fr-mono-feature: "liga" 0, "tnum", "zero";
+}
