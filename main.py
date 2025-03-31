@@ -3,7 +3,8 @@ import os
 
 
 dotenv.load_dotenv()
-if os.name == "nt":
-    os.system("glance.exe")
-else:
-    os.system("glance")
+
+os.system("glance diagnose")
+os.system("glance config:validate")
+# os.system("glance config:print")
+os.system("glance")
