@@ -3,9 +3,13 @@ server:
   assets-path: ./assets
 branding:
   hide-footer: true
+document:
+  head: |
+    <script src="./assets/main.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"></script> -->
 theme:
   background-color: 232 23 18
-  contrast-multiplier: 1.2
+  contrast-multiplier: 1.3
   primary-color: 220 83 75
   positive-color: 105 48 72
   negative-color: 351 74 73
@@ -35,6 +39,8 @@ pages:
               - BlackTeaPie/Course-of-Temptation-Chinese-Localization
               - chinese-liliths-throne/liliths-throne-chinese-release
               - Eltirosto/Degrees-of-Lewdity-Chinese-Localization
+              - repository: glanceapp/glance
+                include-prereleases: true
 
   - name: 狀態
     slug: stats
@@ -53,34 +59,67 @@ pages:
             cache: 1s
             sites:
               - title: ArchiSteamFarm
-                url: http://localhost:1242
+                url: ${ASF_URL}
                 icon: /assets/asf.png
 
-  - name: h
-    columns:
-      - size: full
-        widgets:
-          - type: rss
-            limit: 15
-            collapse-after: 8
-            # failed to retrieve any content
-            feeds:
-              - title: 琉璃神社-論壇
-                url: https://www.hacg.icu/wp/bbs?type=rss2&forum=g
-              - title: 琉璃神社-話題
-                url: https://www.hacg.icu/wp/bbs?type=rss2&forum=g&topic=g
-          - type: custom-api
-            title: random image
-            title-url: https://3650000.xyz/api?mode=66
-            cache: 10m
-            url: https://3650000.xyz/api/
+          - type: extension
+            title: GitHub Stats
+            url: https://github-readme-stats.vercel.app/api
+            allow-potentially-dangerous-html: true
+            fallback-content-type: html
             parameters:
-              mode: 66
-              type: json
-              num: 5
-            method: GET
-            template: |
-              <img src="{{ .JSON.String "url" }}" style="" />
+              username: ${GITHUB_USERNAME}
+              show_icons: true
+              count_private: true
+              locale: cn
+
+          - type: extension
+            title: GitHub top-langs
+            url: https://github-readme-stats.vercel.app/api/top-langs
+            allow-potentially-dangerous-html: true
+            fallback-content-type: html
+            parameters:
+              username: ${GITHUB_USERNAME}
+              show_icons: true
+              count_private: true
+              locale: cn
+
+          - type: extension
+            title: wakatime
+            url: https://github-readme-stats.vercel.app/api/wakatime
+            allow-potentially-dangerous-html: true
+            fallback-content-type: html
+            parameters:
+              username: ${WAKATIME_USERNAME}
+              show_icons: true
+              count_private: true
+              locale: cn
+
+  # - name: h
+  #   columns:
+  #     - size: full
+  #       widgets:
+  #         - type: rss
+  #           limit: 15
+  #           collapse-after: 8
+  #           # failed to retrieve any content
+  #           feeds:
+  #             - title: 琉璃神社-論壇
+  #               url: https://www.hacg.icu/wp/bbs?type=rss2&forum=g
+  #             - title: 琉璃神社-話題
+  #               url: https://www.hacg.icu/wp/bbs?type=rss2&forum=g&topic=g
+  #         - type: custom-api
+  #           title: random image
+  #           title-url: https://3650000.xyz/api?mode=66
+  #           cache: 10m
+  #           url: https://3650000.xyz/api/
+  #           parameters:
+  #             mode: 66
+  #             type: json
+  #             num: 5
+  #           method: GET
+  #           template: |
+  #             <img src="{{ .JSON.String "url" }}" style="" />
 
   - name: ASF
     columns:
@@ -88,30 +127,31 @@ pages:
         widgets:
           - type: custom-api
             title: ASF log
-            title-url: http://localhost:1242/log
+            title-url: ${ASF_URL}/log
             cache: 1s
-            url: http://localhost:1242/Api/NLog/File
+            url: ${ASF_URL}/Api/NLog/File
             headers:
               Authentication: ${ASF_PASSWORD}
             parameters:
               count: 15
             template: |
-              <div style="overflow-y: scroll;" id="ASF-log">
+              <div>
               {{ range .JSON.Array "Result.Content" }}
-              <div style="display: grid;grid-template-columns: auto auto 1fr;line-height: 1.1;margin: 0 0 .1em;width: 100%;">{{ .String "" | trimSpace | printf }}</div>
+              {{ $v := (.String "" | trimSpace) }}
+              <div style="display: grid;grid-template-columns: auto auto 1fr;line-height: 1.1;margin: 0 0 .1em;width: 100%;">{{ $v | printf }}</div>
               {{ end }}
               </div>
 
           - type: custom-api
-            title: ASF info
-            title-url: http://localhost:1242
+            title: ASF stats
+            title-url: ${ASF_URL}
             cache: 1s
-            url: http://localhost:1242/Api/Bot/asf
+            url: ${ASF_URL}/Api/Bot/asf
             headers:
               Authentication: ${ASF_PASSWORD}
             subrequests:
               gl_cofg:
-                url: http://localhost:1242/Api/ASF/
+                url: ${ASF_URL}/Api/ASF/
                 headers:
                   Authentication: ${ASF_PASSWORD}
             template: |
