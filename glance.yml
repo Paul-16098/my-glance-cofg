@@ -42,6 +42,25 @@ pages:
               - repository: glanceapp/glance
                 include-prereleases: true
 
+          - type: custom-api
+            title: github notifications
+            title-url: https://github.com/notifications
+            cachs: 1h
+            url: https://api.github.com/notifications
+            # https://docs.github.com/zh/rest/activity/notifications?apiVersion=2022-11-28#list-notifications-for-the-authenticated-user
+            headers:
+              Authorization: Bearer ${GITHUB_CLASSIC_TOKEN}
+            template: |
+              {{ if eq .Response.StatusCode 200 }}
+              {{ range .JSON.Array "" }}
+              <h2>{{ .JSON.String "repository.full_name" }}</h2>
+              <h3>{{ .JSON.String "repository.description" }}</h3>
+              {{ end }}
+              {{ else }}
+              ERR: {{ .Response.StatusCode }}<br>
+              {{ .JSON.String "message" }}
+              {{ end }}
+
   - name: 狀態
     slug: stats
     columns:
