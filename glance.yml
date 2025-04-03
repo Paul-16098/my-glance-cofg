@@ -49,6 +49,8 @@ pages:
               - Eltirosto/Degrees-of-Lewdity-Chinese-Localization
               - repository: glanceapp/glance
                 include-prereleases: true
+              - repository: Hex-Dragon/PCL2
+                include-prereleases: true
 
           - type: custom-api
             title: github notifications
