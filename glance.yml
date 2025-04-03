@@ -1,5 +1,4 @@
 server:
-  port: 80
   assets-path: ./assets
 branding:
   hide-footer: true
@@ -30,6 +29,15 @@ pages:
 
       - size: full
         widgets:
+          - type: search
+            new-tab: true
+            search-engine: google
+            autofocus: true
+            bangs:
+              - title: YouTube
+                shortcut: "/yt"
+                url: https://www.youtube.com/results?search_query={QUERY}
+
           - type: releases
             title: 發行
             cache: 30m
@@ -66,13 +74,6 @@ pages:
     columns:
       - size: full
         widgets:
-          - type: server-stats
-            cache: 1s
-            title: glance服務器狀態
-            title-url: http://localhost/
-            servers:
-              - type: local
-                name: 服務器
           - type: monitor
             title: 狀態監視器
             cache: 1s
@@ -81,64 +82,30 @@ pages:
                 url: ${ASF_URL}
                 icon: /assets/asf.png
 
-          - type: extension
-            title: GitHub Stats
-            url: https://github-readme-stats.vercel.app/api
-            allow-potentially-dangerous-html: true
-            fallback-content-type: html
-            parameters:
-              username: ${GITHUB_USERNAME}
-              show_icons: true
-              count_private: true
-              locale: cn
+          - type: group
+            define: &data
+              type: extension
+              allow-potentially-dangerous-html: true
+              fallback-content-type: html
+              parameters:
+                username: ${GITHUB_USERNAME}
+                show_icons: true
+                count_private: true
+                locale: cn
+            widgets:
+              - title: GitHub Stats
+                url: https://github-readme-stats.vercel.app/api
+                <<: *data
 
-          - type: extension
-            title: GitHub top-langs
-            url: https://github-readme-stats.vercel.app/api/top-langs
-            allow-potentially-dangerous-html: true
-            fallback-content-type: html
-            parameters:
-              username: ${GITHUB_USERNAME}
-              show_icons: true
-              count_private: true
-              locale: cn
+              - title: GitHub top-langs
+                url: https://github-readme-stats.vercel.app/api/top-langs
+                <<: *data
 
-          - type: extension
-            title: wakatime
-            url: https://github-readme-stats.vercel.app/api/wakatime
-            allow-potentially-dangerous-html: true
-            fallback-content-type: html
-            parameters:
-              username: ${WAKATIME_USERNAME}
-              show_icons: true
-              count_private: true
-              locale: cn
-
-  # - name: h
-  #   columns:
-  #     - size: full
-  #       widgets:
-  #         - type: rss
-  #           limit: 15
-  #           collapse-after: 8
-  #           # failed to retrieve any content
-  #           feeds:
-  #             - title: 琉璃神社-論壇
-  #               url: https://www.hacg.icu/wp/bbs?type=rss2&forum=g
-  #             - title: 琉璃神社-話題
-  #               url: https://www.hacg.icu/wp/bbs?type=rss2&forum=g&topic=g
-  #         - type: custom-api
-  #           title: random image
-  #           title-url: https://3650000.xyz/api?mode=66
-  #           cache: 10m
-  #           url: https://3650000.xyz/api/
-  #           parameters:
-  #             mode: 66
-  #             type: json
-  #             num: 5
-  #           method: GET
-  #           template: |
-  #             <img src="{{ .JSON.String "url" }}" style="" />
+              - title: wakatime
+                url: https://github-readme-stats.vercel.app/api/wakatime
+                parameters:
+                  username: ${WAKATIME_USERNAME}
+                <<: *data
 
   - name: ASF
     columns:
