@@ -30,13 +30,27 @@ pages:
       - size: full
         widgets:
           - type: search
+            title: 搜尋
             new-tab: true
             search-engine: google
             autofocus: true
+            placeholder: 在此輸入以搜尋...
             bangs:
               - title: YouTube
                 shortcut: "/yt"
                 url: https://www.youtube.com/results?search_query={QUERY}
+              - title: GitHub
+                shortcut: "/gh"
+                url: https://github.com/search?q={QUERY}
+              - title: SCP基金會
+                shortcut: "/scp"
+                url: https://scp-wiki-cn.wikidot.com/{QUERY}
+              - title: crates.io
+                shortcut: "/rust"
+                url: https://crates.io/search?q={QUERY}
+              - title: Chrome 擴充
+                shortcut: "/ext"
+                url: https://chromewebstore.google.com/search/{QUERY}
 
           - type: releases
             title: 發行

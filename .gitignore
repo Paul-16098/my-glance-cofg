@@ -1,3 +1,4 @@
 .env
 assets/*.png
 glance.exe
+glance.t.yml
