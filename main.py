@@ -1,6 +1,8 @@
 import dotenv
 import os
 
+RUN_ARG = ">glance.log"
+
 
 def main(
     # glance args
@@ -12,7 +14,7 @@ def main(
         # test env
         "config:validate",
         # run
-        "",
+        RUN_ARG,
     ),
 ):
     """run and test glance
@@ -23,12 +25,12 @@ def main(
 
     for arg in args:
         try:
-            os.system(f"{os.path.join(os.path.dirname(__file__), 'glance')} {arg}")
+            os.system(f"cd {os.path.abspath(os.path.dirname(__file__))}&glance {arg}")
         except KeyboardInterrupt:
-            if arg == "":
+            if arg == RUN_ARG:
                 # run
                 print("\r---- reload ----")
-                main(("",))
+                main((RUN_ARG,))
             else:
                 # not run
                 print("\r---- abort ----")

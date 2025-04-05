@@ -2,3 +2,4 @@
 assets/*.png
 glance.exe
 glance.t.yml
+*.log
