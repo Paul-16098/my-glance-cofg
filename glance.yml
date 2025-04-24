@@ -1,11 +1,14 @@
 server:
   assets-path: ./assets
+
 branding:
-  hide-footer: true
+  # hide-footer: true
+
 document:
   head: |
     <script src="./assets/main.js"></script>
     <!-- <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"></script> -->
+
 theme:
   background-color: 232 23 18
   contrast-multiplier: 1.3
@@ -13,6 +16,7 @@ theme:
   positive-color: 105 48 72
   negative-color: 351 74 73
   custom-css-file: ./assets/main.css
+
 pages:
   - name: 主頁
     slug: Home
@@ -46,15 +50,18 @@ pages:
                 shortcut: "/scp"
                 url: https://scp-wiki-cn.wikidot.com/{QUERY}
               - title: crates.io
-                shortcut: "/rust"
+                shortcut: "/rs"
                 url: https://crates.io/search?q={QUERY}
+              - title: PyPi
+                shortcut: "/py"
+                url: https://pypi.org/search/?q={QUERY}
               - title: Chrome 擴充
                 shortcut: "/ext"
                 url: https://chromewebstore.google.com/search/{QUERY}
 
           - type: releases
             title: 發行
-            cache: 30m
+            cache: 2h
             show-source-icon: true
             token: ${GITHUB_TOKEN}
             repositories:
@@ -67,18 +74,26 @@ pages:
                 include-prereleases: true
 
           - type: custom-api
-            title: github notifications
+            title: GitHub Notifications
             title-url: https://github.com/notifications
-            cachs: 1h
+            cache: 2h
             url: https://api.github.com/notifications
-            # https://docs.github.com/zh/rest/activity/notifications?apiVersion=2022-11-28#list-notifications-for-the-authenticated-user
             headers:
               Authorization: Bearer ${GITHUB_CLASSIC_TOKEN}
             template: |
               {{ if eq .Response.StatusCode 200 }}
-              {{ range .JSON.Array "" }}
-              <h2>{{ .JSON.String "repository.full_name" }}</h2>
-              <h3>{{ .JSON.String "repository.description" }}</h3>
+              {{ if eq (.JSON.Int "@this.#") 0 }}
+              <p>沒有新通知！</p>
+              {{ else }}
+              {{ .JSON.String "" }}
+              {{ range .JSON.Array "@this" }}
+              <h2 class="size-h2">{{ .JSON.String "repository.full_name" }}</h2>
+              <h3 class="size-h3">{{ .JSON.String "repository.description" }}</h3>
+              <p class="size-p">
+                {{ .JSON.String "subject.title" }}<br>
+                {{ .JSON.String "subject.url" }}
+              </p>
+              {{ end }}
               {{ end }}
               {{ else }}
               ERR: {{ .Response.StatusCode }}<br>
@@ -107,7 +122,7 @@ pages:
                 username: ${GITHUB_USERNAME}
                 show_icons: true
                 count_private: true
-                locale: cn
+                locale: cn # etc.
             widgets:
               - title: GitHub Stats
                 url: https://github-readme-stats.vercel.app/api
@@ -123,12 +138,17 @@ pages:
                   username: ${WAKATIME_USERNAME}
                 <<: *data
 
+              # - type: extension
+              #   url: https://github.com/${GITHUB_USERNAME}/${GITHUB_USERNAME}/raw/refs/heads/main/github-metrics.svg
+              #   allow-potentially-dangerous-html: true
+              #   fallback-content-type: html
+
   - name: ASF
     columns:
       - size: full
         widgets:
           - type: custom-api
-            title: ASF log
+            title: ASF Log
             title-url: ${ASF_URL}/log
             cache: 1s
             url: ${ASF_URL}/Api/NLog/File
@@ -145,7 +165,7 @@ pages:
               </div>
 
           - type: custom-api
-            title: ASF stats
+            title: ASF Stats
             title-url: ${ASF_URL}
             cache: 1s
             url: ${ASF_URL}/Api/Bot/asf
@@ -158,13 +178,13 @@ pages:
                   Authentication: ${ASF_PASSWORD}
             template: |
               <div>
-              {{ $gl_cofg := ( .Subrequest "gl_cofg" ) }}
-              <p>Version: {{ $gl_cofg.JSON.String "Result.Version" }}
+              {{ $gl_cofg := (.Subrequest "gl_cofg") }}
+              <p>Version: {{ $gl_cofg.JSON.String "Result.Version" }}</p>
               <p>SteamOwnerID: {{ $gl_cofg.JSON.String "Result.GlobalConfig.s_SteamOwnerID" }}</p><br>
               </div>
               {{ range .JSON.Array "Result.*" }}
               <div>
-              <h3>bot: {{ .String "BotName" }}</h3>
+              <h3 class="size-h3">Bot: {{ .String "BotName" }}</h3>
               <div style="margin-left: 20px;">
               <p>Paused: {{ .Bool "Paused" }}</p>
               <p>SteamID: {{ .String "s_SteamID" }}</p>

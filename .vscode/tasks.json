@@ -6,8 +6,8 @@
     {
       "label": "run",
       "type": "process",
-      "command": "python",
-      "args": ["./main.py"],
+      "command": "uv",
+      "args": ["run", "./main.py"],
       "problemMatcher": [],
       "detail": "Run the Glance application",
       "group": "none",
