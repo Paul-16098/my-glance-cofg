@@ -1,21 +1,32 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/not-first/glance-schema/master/schema.json
+
 server:
   assets-path: ./assets
 
-branding:
-  # hide-footer: true
+# branding:
+#   hide-footer: true
 
 document:
   head: |
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="./assets/main.js"></script>
-    <!-- <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"></script> -->
 
 theme:
-  background-color: 232 23 18
-  contrast-multiplier: 1.3
-  primary-color: 220 83 75
-  positive-color: 105 48 72
-  negative-color: 351 74 73
   custom-css-file: ./assets/main.css
+  presets:
+    default-dark:
+      background-color: 229 19 23
+      contrast-multiplier: 1.2
+      primary-color: 222 74 74
+      positive-color: 96 44 68
+      negative-color: 359 68 71
+    default-light:
+      light: true
+      background-color: 220 23 95
+      contrast-multiplier: 1.0
+      primary-color: 220 91 54
+      positive-color: 109 58 40
+      negative-color: 347 87 44
 
 pages:
   - name: 主頁
@@ -23,13 +34,7 @@ pages:
     columns:
       - size: small
         widgets:
-          - type: calendar
-            title: 日曆
-            first-day-of-week: sunday
-          - type: clock
-            title: 時間
-            title-url: https://time.is/?c=d3Y%E5%B9%B43F3j%E6%97%A5%EF%BC%8C3l%EF%BC%8C%E7%AC%AC3W%E9%80%B1XtH2i2sXfmtXc0Xo480Xz1Xa1Xb51ea29.4e4185.28571f.2d99db.80265.1bb85e.1c3b23Xw1Xv20231119Xh0Xi1XZ1XmXuXs0XB1
-            hour-format: 24h
+          - type: to-do
 
       - size: full
         widgets:
@@ -58,6 +63,9 @@ pages:
               - title: Chrome 擴充
                 shortcut: "/ext"
                 url: https://chromewebstore.google.com/search/{QUERY}
+              - title: wiki
+                shortcut: "/wiki"
+                url: https://zh.wikipedia.org/w/index.php?title=Special%3A%E6%90%9C%E7%B4%A2&search={QUERY}
 
           - type: releases
             title: 發行
@@ -105,14 +113,6 @@ pages:
     columns:
       - size: full
         widgets:
-          - type: monitor
-            title: 狀態監視器
-            cache: 1s
-            sites:
-              - title: ArchiSteamFarm
-                url: ${ASF_URL}
-                icon: /assets/asf.png
-
           - type: group
             define: &data
               type: extension
@@ -147,6 +147,13 @@ pages:
     columns:
       - size: full
         widgets:
+          - type: monitor
+            title: 狀態監視器
+            cache: 1s
+            sites:
+              - title: ArchiSteamFarm
+                url: ${ASF_URL}
+                icon: /assets/asf.png
           - type: custom-api
             title: ASF Log
             title-url: ${ASF_URL}/log

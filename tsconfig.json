@@ -6,7 +6,6 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "baseUrl": ".",
-    "sourceMap": true,
     "lib": ["ESNext", "DOM"],
     "target": "ESNext",
     "module": "commonjs",
