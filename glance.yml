@@ -3,13 +3,10 @@
 server:
   assets-path: ./assets
 
-# branding:
-#   hide-footer: true
-
 document:
   head: |
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="./assets/main.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> -->
+    <script defer src="./assets/main.js"></script>
 
 theme:
   custom-css-file: ./assets/main.css
@@ -34,7 +31,26 @@ pages:
     columns:
       - size: small
         widgets:
-          - type: to-do
+          - type: monitor
+            title: 狀態監視器
+            cache: 1s
+            sites:
+              - title: BitComet
+                icon: http://${BITCOMET_URL}/webui/assets/bitcomet-logo-Czbvc_Rh.svg
+                url: http://${BITCOMET_URL}
+                alt-status-codes:
+                  - 401
+              - title: ArchiSteamFarm
+                icon: https://raw.githubusercontent.com/JustArchiNET/ArchiSteamFarm/main/resources/ASF_184x184.png
+                url: ${ASF_URL}
+                alt-status-codes:
+                  - 401
+          # - type: extension
+          #   title: GitHub 指標
+          #   title-url: https://github.com/${GITHUB_USERNAME}
+          #   url: https://github.com/${GITHUB_USERNAME}/${GITHUB_USERNAME}/raw/refs/heads/main/github-metrics.svg
+          #   allow-potentially-dangerous-html: true
+          #   fallback-content-type: html
 
       - size: full
         widgets:
@@ -116,6 +132,7 @@ pages:
           - type: group
             define: &data
               type: extension
+              cache: 1d
               allow-potentially-dangerous-html: true
               fallback-content-type: html
               parameters:
@@ -138,22 +155,10 @@ pages:
                   username: ${WAKATIME_USERNAME}
                 <<: *data
 
-              # - type: extension
-              #   url: https://github.com/${GITHUB_USERNAME}/${GITHUB_USERNAME}/raw/refs/heads/main/github-metrics.svg
-              #   allow-potentially-dangerous-html: true
-              #   fallback-content-type: html
-
   - name: ASF
     columns:
       - size: full
         widgets:
-          - type: monitor
-            title: 狀態監視器
-            cache: 1s
-            sites:
-              - title: ArchiSteamFarm
-                url: ${ASF_URL}
-                icon: /assets/asf.png
           - type: custom-api
             title: ASF Log
             title-url: ${ASF_URL}/log

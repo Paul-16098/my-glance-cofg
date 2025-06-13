@@ -2,7 +2,6 @@
 import locale
 import dotenv
 import os
-import subprocess
 import paul_tools
 
 # 預設的執行參數
@@ -10,6 +9,7 @@ RUN_ARG = ">glance.log"
 
 # 獲取當前檔案的目錄路徑
 CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))
+os.chdir(CURRENT_DIR)
 
 # 主日誌檔案的路徑
 MAIN_LOG_PATH = os.path.join(CURRENT_DIR, "main.log")
@@ -51,21 +51,18 @@ def log_subprocess_output(logger, process):
     )
 
 
-def run(arg: str, logger, current_dir: str = CURRENT_DIR):
+def run(arg: str, logger):
     """
-    執行 glance 指令並記錄輸出。
-
-    :param arg: glance 的參數
-    :param current_dir: 執行指令的目錄
-    :param logger: 日誌記錄器
+    Executes the 'glance' command with the specified argument and logs the output.
+    Args:
+        arg (str): The argument to pass to the 'glance' command.
+        logger: The logger instance used for logging debug information.
+    Note:
+        This function replaces the current process with the 'glance' executable using os.execv,
+        so any code after os.execv will not be executed.
     """
     logger.debug(f"running glance with arg: `{arg}`")
-    process = subprocess.run(
-        f"glance {arg}", shell=True, cwd=current_dir, capture_output=True
-    )
-    log_subprocess_output(logger, process)
-    if process.returncode != 0:
-        raise GlanceError(f"glance {arg} failed: {process.returncode}")
+    os.system(".\\glance " + arg)
     logger.debug(f"finished processing arg: `{arg}`")
 
 

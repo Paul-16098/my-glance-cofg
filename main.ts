@@ -1,5 +1,5 @@
-// setTimeout(() => location.reload(), 5 * 60 * 1000);
-
+setTimeout(() => location.reload(), 5 * 60 * 1000);
+/*
 function get_theme() {
   let theme = "light";
   if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
@@ -16,14 +16,18 @@ function set_theme() {
   const theme_style: HTMLStyleElement = document.querySelector(
     "#theme-style"
   ) as HTMLStyleElement;
-  $.post({
-    url: `http://localhost:8080/api/set-theme/default-${get_theme()}`,
-    dataType: "html",
-    success: function (data) {
-      theme_style.innerHTML = data;
+  fetch(`http://localhost:8080/api/set-theme/default-${get_theme()}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
     },
-  });
+  })
+    .then((response) => response.text())
+    .then((data) => {
+      theme_style.innerHTML = data;
+    });
 
   console.debug("set_theme: done");
 }
 set_theme();
+*/

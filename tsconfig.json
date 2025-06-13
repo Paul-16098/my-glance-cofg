@@ -10,7 +10,8 @@
     "target": "ESNext",
     "module": "commonjs",
     "outDir": "./assets",
-    "strict": true
+    "strict": true,
+    "sourceMap": true
   },
   "exclude": ["node_modules", "**/node_modules/*"]
 }
