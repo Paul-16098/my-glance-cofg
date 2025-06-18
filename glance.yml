@@ -3,6 +3,13 @@
 server:
   assets-path: ./assets
 
+# auth:
+#   secret-key: oy0RwIBcSwm+shl7B67o8SuS+3fW1FtC2pWE4+rRi6rUYn8HBFcW1+wMTls21dKl0O8Qv2Br4tKDbcv2i+jhyw==
+#   users:
+#     Paul:
+#       # Paul1234Paul
+#       password-hash: $2a$10$SsDG5hmip5z43Fg3jvDYQuwF6pci2ijfkXylqsodgcfjRHuI75LuO
+
 document:
   head: |
     <!-- <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> -->
@@ -104,24 +111,29 @@ pages:
             url: https://api.github.com/notifications
             headers:
               Authorization: Bearer ${GITHUB_CLASSIC_TOKEN}
+              Accept: application/vnd.github+json
             template: |
               {{ if eq .Response.StatusCode 200 }}
-              {{ if eq (.JSON.Int "@this.#") 0 }}
-              <p>沒有新通知！</p>
+                {{ if eq (.JSON.Int "@this.#") 0 }}
+                  <p>沒有新通知！</p>
+                {{ else }}
+                  <div class="github-repos">
+                    <ul class="list list-gap-14 collapsible-container" data-collapse-after="5">
+                      {{ range .JSON.Array "" }}
+                        <li>
+                          <a class="size-h3 color-primary" href="{{ .String "subject.url" }}">{{ .String "subject.title" }}</a>
+                          <h3><a href="" target="_blank"></a></h3>
+                          <ul class="list-horizontal-text device-info">
+                            <li data-popover-type="html"><div data-popover-html="">Type</div>{{ .String "subject.type" }}</li>
+                            <li data-popover-type="html"><div data-popover-html="">Repository</div>{{ .String "repository.full_name" }}</li>
+                          </ul>
+                        </li>
+                      {{ end }}
+                    </ul>
+                  </div>
+                {{ end }}
               {{ else }}
-              {{ .JSON.String "" }}
-              {{ range .JSON.Array "@this" }}
-              <h2 class="size-h2">{{ .JSON.String "repository.full_name" }}</h2>
-              <h3 class="size-h3">{{ .JSON.String "repository.description" }}</h3>
-              <p class="size-p">
-                {{ .JSON.String "subject.title" }}<br>
-                {{ .JSON.String "subject.url" }}
-              </p>
-              {{ end }}
-              {{ end }}
-              {{ else }}
-              ERR: {{ .Response.StatusCode }}<br>
-              {{ .JSON.String "message" }}
+                <p>ERR: {{ .Response.StatusCode }}</p>
               {{ end }}
 
   - name: 狀態

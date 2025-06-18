@@ -1,5 +1,5 @@
 setTimeout(() => location.reload(), 5 * 60 * 1000);
-/*
+
 function get_theme() {
   let theme = "light";
   if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
@@ -24,10 +24,10 @@ function set_theme() {
   })
     .then((response) => response.text())
     .then((data) => {
-      theme_style.innerHTML = data;
+      // theme_style.innerHTML = data;
+      location.reload();
     });
 
   console.debug("set_theme: done");
 }
-set_theme();
-*/
+// set_theme();
